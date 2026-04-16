@@ -2,6 +2,7 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Pencil, Sparkles, Moon, Sun, Monitor, Bell, Mail, Loader2 } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { updateProfile, uploadAvatar } from '../api/user';
 
 const SettingsPage = () => {
   const { user, token, setUser } = useContext(AuthContext);
@@ -18,18 +19,8 @@ const SettingsPage = () => {
 
   const handleProfileUpdate = async (updates) => {
     try {
-      const res = await fetch('http://localhost:5000/api/auth/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(updates)
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setUser({ isLoggedIn: true, ...data });
-      }
+      const data = await updateProfile(updates);
+      setUser({ isLoggedIn: true, ...data });
     } catch (err) {
       console.error('Failed to update profile', err);
     }
@@ -44,16 +35,9 @@ const SettingsPage = () => {
     formData.append('image', file);
 
     try {
-      const uploadRes = await fetch('http://localhost:5000/api/upload', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData
-      });
-      const uploadData = await uploadRes.json();
+      const uploadData = await uploadAvatar(formData);
 
-      if (uploadRes.ok && uploadData.url) {
+      if (uploadData.url) {
         await handleProfileUpdate({ photoUrl: uploadData.url });
       }
     } catch (err) {

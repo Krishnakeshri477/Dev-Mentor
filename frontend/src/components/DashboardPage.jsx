@@ -26,6 +26,7 @@ import {
 } from 'recharts';
 import { AuthContext } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { getDashboardAnalysis } from '../api/dashboard';
 
 const DashboardPage = () => {
   const { token } = useContext(AuthContext);
@@ -37,17 +38,10 @@ const DashboardPage = () => {
   const fetchAnalysis = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/dashboard/analysis', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      const result = await res.json();
-      if (result.success) {
-        setData(result.data);
-      } else {
-        setError(result.message);
-      }
+      const data = await getDashboardAnalysis();
+      setData(data);
     } catch (err) {
-      setError('Connection to intelligence engine failed.');
+      setError(err.response?.data?.message || 'Connection to intelligence engine failed.');
     } finally {
       setLoading(false);
     }

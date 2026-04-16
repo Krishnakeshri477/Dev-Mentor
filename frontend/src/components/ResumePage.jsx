@@ -1,6 +1,7 @@
 import React, { useState, useRef, useContext } from 'react';
 import { UploadCloud, FileText, CheckCircle, AlertTriangle, Lightbulb, User as UserIcon } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
+import { uploadResume } from '../api/resume';
 
 const ResumePage = ({ onRequiresLogin }) => {
   const { user, token } = useContext(AuthContext);
@@ -78,23 +79,10 @@ const ResumePage = ({ onRequiresLogin }) => {
     formData.append('resume', file);
 
     try {
-      const response = await fetch('http://localhost:5000/api/resume/upload', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to analyze resume');
-      }
-
+      const data = await uploadResume(formData);
       setResults(data.document);
     } catch (err) {
-      setError(err.message || 'An error occurred during analysis.');
+      setError(err.response?.data?.message || err.message || 'An error occurred during analysis.');
     } finally {
       setIsAnalyzing(false);
     }

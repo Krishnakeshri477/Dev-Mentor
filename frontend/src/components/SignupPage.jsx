@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Lock, Mail, User as UserIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { register } from '../api/auth';
 
 const SignupPage = () => {
   const [name, setName] = useState('');
@@ -17,20 +18,11 @@ const SignupPage = () => {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setToken(data.token);
-        navigate('/');
-      } else {
-        setError(data.message || 'Signup failed');
-      }
+      const data = await register(name, email, password);
+      setToken(data.token);
+      navigate('/');
     } catch (err) {
-      setError('Network error');
+      setError(err.response?.data?.message || 'Signup failed');
     }
   };
 

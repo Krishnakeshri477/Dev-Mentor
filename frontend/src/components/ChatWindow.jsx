@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Search, Bell, Share, Paperclip, Mic, Send } from 'lucide-react';
 import MessageBubble from './MessageBubble';
 import { AuthContext } from '../context/AuthContext';
+import { getChatHistory, sendMessage } from '../api/chat';
 
 const ChatWindow = ({ onRequiresLogin }) => {
   const { user, token } = useContext(AuthContext);
@@ -30,34 +31,31 @@ const ChatWindow = ({ onRequiresLogin }) => {
   useEffect(() => {
     const fetchHistory = async () => {
       if (!user || !token) return;
-      try {
-        const res = await fetch('http://localhost:5000/api/chat/history', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json();
-        if (res.ok && data.interactions) {
-          const loadedMessages = [];
-          
-          data.interactions.forEach(item => {
-            loadedMessages.push({
-              id: item._id + '-user',
-              role: 'user',
-              content: item.query,
-              timestamp: new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        try {
+          const data = await getChatHistory();
+          if (data.interactions) {
+            const loadedMessages = [];
+            
+            data.interactions.forEach(item => {
+              loadedMessages.push({
+                id: item._id + '-user',
+                role: 'user',
+                content: item.query,
+                timestamp: new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+              });
+              loadedMessages.push({
+                id: item._id + '-ai',
+                role: 'ai',
+                content: item.aiResponse,
+                timestamp: new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+              });
             });
-            loadedMessages.push({
-              id: item._id + '-ai',
-              role: 'ai',
-              content: item.aiResponse,
-              timestamp: new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            });
-          });
-          
-          setMessages(loadedMessages);
+            
+            setMessages(loadedMessages);
+          }
+        } catch (err) {
+          console.error("Failed to load chat history", err);
         }
-      } catch (err) {
-        console.error("Failed to load chat history", err);
-      }
     };
     
     fetchHistory();
@@ -82,16 +80,7 @@ const ChatWindow = ({ onRequiresLogin }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/chat/message', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ message: newUserMsg.content }) // Valid user context handled by backend now
-      });
-
-      const result = await response.json();
+      const result = await sendMessage(newUserMsg.content);
       const aiContent = result.data?.aiResponse || "Sorry, I couldn't process that.";
       const weaknesses = result.data?.identifiedWeakSpots || [];
 

@@ -15,6 +15,7 @@ import {
   Star
 } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
+import { discoverRealJobs } from '../api/intelligence';
 
 const JobPage = () => {
   const { token, user } = useContext(AuthContext);
@@ -30,26 +31,10 @@ const JobPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:5000/api/intelligence/discover-real-jobs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          experienceLevel: experience,
-          preferredLocation: locationPreference
-        })
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        setMatchingResults(result.data);
-      } else {
-        setError(result.message || 'Live discovery failed');
-      }
+      const data = await discoverRealJobs(experience, locationPreference);
+      setMatchingResults(data);
     } catch (err) {
-      setError('Connection to intelligence engine failed. Ensure backend is running.');
+      setError(err.response?.data?.message || 'Connection to intelligence engine failed.');
     } finally {
       setLoading(false);
     }
@@ -59,27 +44,13 @@ const JobPage = () => {
     if (!token) return;
     setDiscovering(true);
     try {
-      const response = await fetch('http://localhost:5000/api/intelligence/discover-real-jobs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          experienceLevel: experience,
-          preferredLocation: locationPreference
-        })
-      });
-
-      const result = await response.json();
-      if (result.success && result.data.jobs) {
+      const data = await discoverRealJobs(experience, locationPreference);
+      if (data.jobs) {
         setMatchingResults(prev => ({
           ...prev,
-          jobs: [...(prev?.jobs || []), ...result.data.jobs],
-          overallSummary: result.data.overallSummary || prev?.overallSummary
+          jobs: [...(prev?.jobs || []), ...data.jobs],
+          overallSummary: data.overallSummary || prev?.overallSummary
         }));
-      } else {
-        console.warn('Live discovery returned no results');
       }
     } catch (err) {
       console.error('Discovery error:', err);

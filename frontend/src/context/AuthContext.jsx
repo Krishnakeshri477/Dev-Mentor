@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { getProfile } from '../api/auth';
 
 export const AuthContext = createContext();
 
@@ -11,18 +12,12 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         localStorage.setItem('token', token);
         try {
-          const res = await fetch('http://localhost:5000/api/auth/profile', {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-          if (res.ok) {
-            const data = await res.json();
-            setUser({ isLoggedIn: true, ...data }); 
-          } else {
-            localStorage.removeItem('token');
-            setUser(null);
-          }
+          const data = await getProfile();
+          setUser({ isLoggedIn: true, ...data });
         } catch (error) {
           console.error('Failed to fetch user', error);
+          localStorage.removeItem('token');
+          setUser(null);
         }
       } else {
         localStorage.removeItem('token');
