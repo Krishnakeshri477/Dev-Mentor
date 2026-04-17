@@ -89,14 +89,14 @@ const DashboardPage = () => {
     <div className="flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#0A0A0A] p-4 lg:p-8 transition-colors duration-200 scrollbar-hide">
 
       {/* Header */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 sm:mb-8 gap-4 sm:gap-6">
         <div>
-          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
-            Career Dashboard <Sparkles className="w-6 h-6 text-purple-500" />
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
+            Career Dashboard <Sparkles className="w-5 sm:w-6 h-5 sm:h-6 text-purple-500" />
           </h1>
-          <p className="text-gray-500 mt-1 font-medium">Real-time resume & interaction intelligence</p>
+          <p className="text-xs sm:text-sm text-gray-500 mt-1 font-medium">Real-time resume & interaction intelligence</p>
         </div>
-        <button onClick={fetchAnalysis} className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all font-semibold text-sm">
+        <button onClick={fetchAnalysis} className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all font-semibold text-sm">
           <RefreshCcw className="w-4 h-4" /> Sync Data
         </button>
       </div>
@@ -104,11 +104,11 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-20">
 
         {/* 2. ATS Score Card (Highlight) */}
-        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-8 flex flex-col items-center justify-center relative overflow-hidden group shadow-sm transition-all hover:shadow-purple-500/5">
+        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden group shadow-sm transition-all hover:shadow-purple-500/5">
           <div className="absolute -top-10 -left-10 w-32 h-32 bg-purple-500/5 rounded-full blur-2xl group-hover:bg-purple-500/10 transition-all"></div>
           <h3 className="text-gray-400 font-bold mb-6 text-xs uppercase tracking-[0.2em]">ATS Master Score</h3>
-          <div className="relative w-40 h-40 flex items-center justify-center">
-            <svg className="w-full h-full transform -rotate-90">
+          <div className="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
               <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-gray-100 dark:text-gray-900" />
               <circle
                 cx="80" cy="80" r="70"
@@ -128,14 +128,14 @@ const DashboardPage = () => {
               </defs>
             </svg>
             <div className="absolute inset-0 flex items-center justify-center flex-col">
-              <span className="text-5xl font-black text-gray-900 dark:text-white">{data?.atsScore}</span>
-              <span className="text-[10px] font-bold text-purple-500 tracking-widest uppercase mt-1">Ready</span>
+              <span className="text-3xl sm:text-5xl font-black text-gray-900 dark:text-white">{data?.atsScore}</span>
+              <span className="text-[10px] font-bold text-purple-500 tracking-widest uppercase mt-0 sm:mt-1">Ready</span>
             </div>
           </div>
         </div>
 
         {/* 3. Skills + Missing Skills */}
-        <div className="lg:col-span-2 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-8 shadow-sm">
+        <div className="lg:col-span-2 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-8 shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
             <div className="space-y-4">
               <h3 className="text-emerald-500 text-sm font-bold flex items-center gap-2 uppercase tracking-wider">
@@ -161,7 +161,7 @@ const DashboardPage = () => {
         </div>
 
         {/* 4. Resume Insights (AI Summary + Suggestions) */}
-        <div className="lg:col-span-2 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-8 shadow-sm group">
+        <div className="lg:col-span-2 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-8 shadow-sm group">
           <h3 className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white mb-6">
             <TrendingUp className="w-5 h-5 text-purple-500" /> Resume Intelligence
           </h3>
@@ -181,7 +181,7 @@ const DashboardPage = () => {
         </div>
 
         {/* 5. Weakness Analysis (from interactions) */}
-        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-8 shadow-sm">
+        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-8 shadow-sm">
           <h3 className="flex items-center gap-2 text-lg font-bold mb-6 text-gray-900 dark:text-white">
             <AlertCircle className="w-5 h-5 text-rose-500" /> Coaching Gaps
           </h3>
@@ -198,7 +198,7 @@ const DashboardPage = () => {
         </div>
 
         {/* 6. Progress Chart (Improvement over time) */}
-        <div className="lg:col-span-2 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-8 shadow-sm">
+        <div className="lg:col-span-2 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-8 shadow-sm">
           <div className="flex justify-between items-center mb-10">
             <h3 className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
               <History className="w-5 h-5 text-purple-500" /> Improvement Vector
@@ -235,7 +235,7 @@ const DashboardPage = () => {
         </div>
 
         {/* 7. Recent AI Conversations */}
-        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-8 shadow-sm">
+        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-8 shadow-sm">
           <h3 className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white mb-6">
             <MessageSquare className="w-5 h-5 text-indigo-500" /> Recent Sessions
           </h3>

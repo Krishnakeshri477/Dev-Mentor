@@ -23,7 +23,7 @@ const Sidebar = ({ onRequiresLogin }) => {
   };
 
   return (
-    <aside className="w-64 h-screen bg-gray-50 dark:bg-[#070707] border-r border-gray-200 dark:border-gray-800 flex flex-col justify-between shrink-0 z-10 transition-colors duration-200">
+    <aside className="hidden lg:flex w-64 h-screen bg-gray-50 dark:bg-[#070707] border-r border-gray-200 dark:border-gray-800 flex-col justify-between shrink-0 z-10 transition-colors duration-200">
       <div className="p-6">
         {/* Logo Section */}
         <div className="flex items-center gap-3 mb-8">

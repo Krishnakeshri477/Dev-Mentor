@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Lock, Mail, User as UserIcon } from 'lucide-react';
+import { X, Lock, Mail, User as UserIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { register } from '../api/auth';
@@ -28,7 +28,13 @@ const SignupPage = () => {
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-50 dark:bg-[#050505] transition-colors duration-200 text-gray-900 dark:text-gray-200">
-      <div className="bg-white dark:bg-[#0f0f13] border border-gray-200 dark:border-gray-800 transition-colors duration-200 rounded-2xl w-full max-w-md p-8 shadow-sm dark:shadow-[0_0_50px_rgba(124,58,237,0.1)]">
+      <div className="bg-white dark:bg-[#0f0f13] border border-gray-200 dark:border-gray-800 transition-colors duration-200 rounded-2xl w-full max-w-md p-8 shadow-sm dark:shadow-[0_0_50px_rgba(124,58,237,0.1)] relative">
+        <button 
+          onClick={() => navigate('/')} 
+          className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
         <h2 className="text-3xl font-bold font-display text-gray-900 dark:text-white transition-colors mb-2">Create Account</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors mb-8">Join DevMentor AI to unlock intelligent coding mentorship.</p>
 

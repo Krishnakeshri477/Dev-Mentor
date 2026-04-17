@@ -88,20 +88,20 @@ const JobPage = () => {
       {/* Header Section */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-10 gap-6">
         <div>
-          <h1 className="text-4xl font-black text-gray-900 dark:text-white flex items-center gap-3 tracking-tight">
-            AI Talent Matcher <Target className="w-8 h-8 text-purple-500 animate-pulse" />
+          <h1 className="text-2xl sm:text-4xl font-black text-gray-900 dark:text-white flex items-center gap-3 tracking-tight">
+            AI Talent Matcher <Target className="w-6 h-6 sm:w-8 sm:h-8 text-purple-500 animate-pulse" />
           </h1>
-          <p className="text-gray-500 mt-2 font-medium text-lg">Predicting your fit across elite opportunities</p>
+          <p className="text-gray-500 mt-2 font-medium text-base sm:text-lg">Predicting your fit across elite opportunities</p>
         </div>
         
         {/* Dynamic Inputs */}
-        <div className="flex flex-wrap gap-4 items-center bg-white dark:bg-[#111] p-3 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl shadow-purple-500/5">
-          <div className="flex items-center gap-3 px-4 border-r border-gray-200 dark:border-gray-800">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-4 items-center bg-white dark:bg-[#111] p-3 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl shadow-purple-500/5 w-full lg:w-auto">
+          <div className="flex items-center gap-3 px-4 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-800 w-full sm:w-auto pb-3 sm:pb-0">
             <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] whitespace-nowrap">Exp Level</span>
             <select 
               value={experience} 
               onChange={(e) => setExperience(e.target.value)}
-              className="bg-transparent font-black text-sm text-purple-500 focus:outline-none cursor-pointer hover:text-purple-400 transition-colors appearance-none"
+              className="bg-transparent font-black text-sm text-purple-500 focus:outline-none cursor-pointer hover:text-purple-400 transition-colors appearance-none flex-1"
             >
               <option value="Internship" className="bg-white dark:bg-[#111] text-gray-900 dark:text-gray-100">Internship</option>
               <option value="1-3 years" className="bg-white dark:bg-[#111] text-gray-900 dark:text-gray-100">1-3 Years</option>
@@ -109,20 +109,20 @@ const JobPage = () => {
               <option value="5+ years" className="bg-white dark:bg-[#111] text-gray-900 dark:text-gray-100">5+ Years</option>
             </select>
           </div>
-          <div className="flex items-center gap-2 px-3 border-r border-gray-200 dark:border-gray-800">
+          <div className="flex items-center gap-2 px-3 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-800 w-full sm:w-auto pb-3 sm:pb-0">
             <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Target</span>
             <input 
               type="text" 
               value={locationPreference} 
               onChange={(e) => setLocationPreference(e.target.value)}
               placeholder="Location..."
-              className="bg-transparent font-bold text-emerald-500 focus:outline-none w-24"
+              className="bg-transparent font-bold text-emerald-500 focus:outline-none w-full sm:w-24"
             />
           </div>
           <button 
             onClick={fetchLiveJobs}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:opacity-90 transition-all font-bold text-sm disabled:opacity-50"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:opacity-90 transition-all font-bold text-sm disabled:opacity-50 w-full sm:w-auto"
           >
             {loading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : <Sparkles className="w-4 h-4" />}
             Refresh Search
@@ -137,7 +137,7 @@ const JobPage = () => {
       )}
 
       {/* Main Jobs Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-20">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
         {matchingResults?.jobs?.map((job, idx) => {
           const score = job.matchScore || 0;
           const probability = job.shortlistProbability || 0;
@@ -159,11 +159,11 @@ const JobPage = () => {
                   </div>
                   
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-purple-500 transition-colors uppercase tracking-tight leading-tight">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white group-hover:text-purple-500 transition-colors uppercase tracking-tight leading-tight">
                       {job.jobTitle}
                     </h2>
-                    <p className="text-gray-500 font-bold text-sm mt-1 flex items-center gap-1">
-                      <Briefcase className="w-4 h-4 text-gray-400" /> {job.companyName || job.company} <span className="text-gray-300 mx-1">|</span> <MapPin className="w-4 h-4 text-emerald-500/70" /> {job.location}
+                    <p className="text-gray-500 font-bold text-xs sm:text-sm mt-1 flex flex-wrap items-center gap-1">
+                      <Briefcase className="w-4 h-4 text-gray-400" /> {job.companyName || job.company} <span className="text-gray-300 mx-1 hidden sm:inline">|</span> <MapPin className="w-4 h-4 text-emerald-500/70" /> {job.location}
                     </p>
                   </div>
 

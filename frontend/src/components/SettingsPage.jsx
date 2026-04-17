@@ -1,11 +1,11 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
-import { Pencil, Sparkles, Moon, Sun, Monitor, Bell, Mail, Loader2 } from 'lucide-react';
+import { Pencil, Sparkles, Moon, Sun, Monitor, Bell, Mail, Loader2, LogOut } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { updateProfile, uploadAvatar } from '../api/user';
 
 const SettingsPage = () => {
-  const { user, token, setUser } = useContext(AuthContext);
+  const { user, token, setUser, logout } = useContext(AuthContext);
   const { theme, setTheme } = useTheme();
   const [name, setName] = useState('');
   const [isUploading, setIsUploading] = useState(false);
@@ -48,7 +48,7 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="flex-1 bg-gray-50 dark:bg-[#0b0b0e] transition-colors duration-200 h-screen overflow-y-auto px-8 py-10 font-sans text-gray-900 dark:text-gray-200">
+    <div className="flex-1 bg-gray-50 dark:bg-[#0b0b0e] transition-colors duration-200 h-screen overflow-y-auto px-4 sm:px-8 py-6 sm:py-10 font-sans text-gray-900 dark:text-gray-200 scrollbar-hide">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-10">
@@ -63,7 +63,7 @@ const SettingsPage = () => {
         <div className="mb-12">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 transition-colors">Profile Information</h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-5 transition-colors">Update your personal details and how others see you.</p>
-          <div className="bg-white dark:bg-[#101014] border border-gray-200 dark:border-[#1a1a24] shadow-sm dark:shadow-none transition-colors rounded-2xl p-6 flex items-start gap-8">
+          <div className="bg-white dark:bg-[#101014] border border-gray-200 dark:border-[#1a1a24] shadow-sm dark:shadow-none transition-colors rounded-2xl p-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 text-center sm:text-left">
             <div className="relative">
               <div className="w-20 h-20 rounded-2xl overflow-hidden ring-1 ring-gray-700 bg-gray-800">
                 {isUploading ? (
@@ -80,7 +80,7 @@ const SettingsPage = () => {
               </button>
             </div>
 
-            <div className="flex-1 grid grid-cols-2 gap-6">
+            <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Full Name</label>
                 <div className="w-full bg-gray-50 dark:bg-[#0a0a0d] border border-gray-200 dark:border-[#1a1a24] text-gray-500 dark:text-gray-200 transition-colors rounded-lg px-4 py-3 text-sm cursor-not-allowed">
@@ -108,12 +108,12 @@ const SettingsPage = () => {
               <span className="text-xs font-bold text-[#4dbacc] tracking-widest uppercase">Premium Insights</span>
             </div>
 
-            <div className="flex justify-between items-end mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-6">
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-gray-900 dark:text-white transition-colors tracking-tight">1,200</span>
+                <span className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white transition-colors tracking-tight">1,200</span>
                 <span className="text-sm text-gray-500 font-medium">/ 5,000 credits</span>
               </div>
-              <button className="bg-gray-100 hover:bg-gray-200 dark:bg-[#1c1c24] dark:hover:bg-[#252530] text-gray-900 dark:text-gray-200 text-sm font-medium py-2 px-4 rounded-lg transition border border-gray-200 dark:border-[#2a2a35]">
+              <button className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 dark:bg-[#1c1c24] dark:hover:bg-[#252530] text-gray-900 dark:text-gray-200 text-sm font-medium py-2 px-4 rounded-lg transition border border-gray-200 dark:border-[#2a2a35]">
                 Upgrade Plan
               </button>
             </div>
@@ -151,6 +151,32 @@ const SettingsPage = () => {
                 <button onClick={() => setTheme('dark')} className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-colors ${theme === 'dark' ? 'bg-white dark:bg-[#1c1c24] text-gray-900 dark:text-gray-200 shadow-sm border border-gray-200 dark:border-[#2a2a35]' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}>Dark</button>
                 <button onClick={() => setTheme('system')} className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-colors ${theme === 'system' ? 'bg-white dark:bg-[#1c1c24] text-gray-900 dark:text-gray-200 shadow-sm border border-gray-200 dark:border-[#2a2a35]' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}>System</button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Account & Security */}
+        <div className="mb-20">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 transition-colors">Account & Security</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-5 transition-colors">Manage your account access and sessions.</p>
+
+          <div className="bg-white dark:bg-[#101014] border border-gray-200 dark:border-[#1a1a24] shadow-sm dark:shadow-none transition-colors rounded-2xl p-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-lg bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center">
+                  <LogOut className="w-5 h-5 text-rose-500" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-200">Sign Out</h3>
+                  <p className="text-xs text-gray-500">Safely log out of your DevMentor AI account.</p>
+                </div>
+              </div>
+              <button 
+                onClick={logout}
+                className="w-full sm:w-auto px-6 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/20 rounded-xl font-bold transition-all"
+              >
+                Logout Now
+              </button>
             </div>
 
             {/* Push Notifications */}

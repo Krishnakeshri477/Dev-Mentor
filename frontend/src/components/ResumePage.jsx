@@ -89,7 +89,7 @@ const ResumePage = ({ onRequiresLogin }) => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#0A0A0A] p-8 transition-colors duration-200">
+    <div className="flex-1 flex flex-col h-screen overflow-y-auto bg-gray-50 dark:bg-[#0A0A0A] p-4 lg:p-8 transition-colors duration-200">
       <div className="max-w-4xl w-full mx-auto space-y-8">
         
         {/* Header */}
@@ -100,7 +100,7 @@ const ResumePage = ({ onRequiresLogin }) => {
 
         {/* Upload Section */}
         <div 
-          className={`relative w-full rounded-2xl border-2 border-dashed p-12 transition-all duration-300 flex flex-col items-center justify-center text-center overflow-hidden
+          className={`relative w-full rounded-2xl border-2 border-dashed p-6 lg:p-12 transition-all duration-300 flex flex-col items-center justify-center text-center overflow-hidden
             ${isDragActive 
               ? 'border-purple-500 bg-purple-500/10' 
               : 'border-gray-300 dark:border-gray-800 bg-white dark:bg-[#111] hover:border-purple-400 dark:hover:border-purple-500/50 hover:bg-gray-50 dark:hover:bg-[#151515]'
@@ -143,7 +143,7 @@ const ResumePage = ({ onRequiresLogin }) => {
 
         {/* Selected File & Action */}
         {file && !results && (
-          <div className="flex items-center justify-between p-4 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm">
+          <div className="flex flex-col sm:flex-row items-center justify-between p-4 bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm gap-4">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-indigo-500/10 text-indigo-500 rounded-xl">
                 <FileText className="w-6 h-6" />
@@ -158,7 +158,7 @@ const ResumePage = ({ onRequiresLogin }) => {
               onClick={handleAnalyze}
               disabled={isAnalyzing}
               className={`px-8 py-3 rounded-xl font-semibold text-white shadow-lg shadow-purple-500/30 transition-all ${
-                isAnalyzing ? 'bg-purple-400 cursor-not-allowed' : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:shadow-purple-500/50 hover:-translate-y-0.5'
+              isAnalyzing ? 'bg-purple-400 cursor-not-allowed' : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:shadow-purple-500/50 hover:-translate-y-0.5 w-full sm:w-auto'
               }`}
             >
               {isAnalyzing ? (
