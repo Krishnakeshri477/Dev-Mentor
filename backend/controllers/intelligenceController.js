@@ -8,7 +8,7 @@ import { matchJobsWithResume, searchJobsOnWeb } from '../services/intelligenceSe
  */
 export const discoverRealJobs = async (req, res) => {
   try {
-    const { experienceLevel, preferredLocation } = req.body;
+    const { experienceLevel, preferredLocation, jobTitle } = req.body;
     const userId = req.user._id;
 
     const latestResume = await Resume.findOne({ userId }).sort({ createdAt: -1 });
@@ -17,7 +17,7 @@ export const discoverRealJobs = async (req, res) => {
     }
 
     // 1. Search live results
-    const realJobs = await searchJobsOnWeb(latestResume, preferredLocation, experienceLevel);
+    const realJobs = await searchJobsOnWeb(latestResume, preferredLocation, experienceLevel, jobTitle);
 
     if (realJobs.length === 0) {
       return res.status(200).json({ 

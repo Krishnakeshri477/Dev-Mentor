@@ -52,7 +52,7 @@ export const generateCareerIntelligence = async ({ user, resume, interactions })
         { role: 'system', content: systemPrompt },
         { role: 'user', content: "Generate my comprehensive dashboard intelligence report." }
       ],
-      model: 'openai/gpt-oss-20b',
+      model: 'llama-3.3-70b-versatile',
       temperature: 0.5,
       response_format: { type: "json_object" }
     });
@@ -123,7 +123,7 @@ export const matchJobsWithResume = async ({ experienceLevel, preferredLocation, 
         { role: 'system', content: systemPrompt },
         { role: 'user', content: "Perform matching analysis for the provided jobs." }
       ],
-      model:'openai/gpt-oss-20b',
+      model:'llama-3.3-70b-versatile',
       temperature: 0.2, // Lower temperature for more deterministic scoring
       response_format: { type: "json_object" }
     });
@@ -140,8 +140,10 @@ export const matchJobsWithResume = async ({ experienceLevel, preferredLocation, 
  * Searches the web for real job listings and parses them into structured data.
  * @param {Object} resume - User resume data.
  * @param {string} preferredLocation - Target location.
+ * @param {string} experienceLevel - Target experience.
+ * @param {string} jobTitle - Specific job role/title.
  */
-export const searchJobsOnWeb = async (resume, preferredLocation, experienceLevel) => {
+export const searchJobsOnWeb = async (resume, preferredLocation, experienceLevel, jobTitle = '') => {
   if (!process.env.SERPER_API_KEY) {
     throw new Error('Serper API Key missing');
   }
@@ -149,7 +151,10 @@ export const searchJobsOnWeb = async (resume, preferredLocation, experienceLevel
   // Optimize search query for freshness and relevance
   const primarySkills = resume.skills.slice(0, 3).join(' ');
   const dateLimit = 'after:2025-01-01'; // Get relatively recent jobs
-  const searchQuery = `jobs "${primarySkills}" "${experienceLevel}" "${preferredLocation}" ${dateLimit} site:linkedin.com/jobs OR site:indeed.com OR site:glassdoor.com`;
+  
+  // Use jobTitle if provided, otherwise fallback to skills
+  const querySubject = jobTitle ? `"${jobTitle}"` : `"${primarySkills}"`;
+  const searchQuery = `jobs ${querySubject} "${experienceLevel}" "${preferredLocation}" ${dateLimit} site:linkedin.com/jobs OR site:indeed.com OR site:glassdoor.com`;
 
   try {
     const response = await axios.post('https://google.serper.dev/search', {
@@ -193,7 +198,7 @@ export const searchJobsOnWeb = async (resume, preferredLocation, experienceLevel
 
     const chatCompletion = await groq.chat.completions.create({
       messages: [{ role: 'user', content: extractionPrompt }],
-      model: 'openai/gpt-oss-20b',
+      model: 'llama-3.3-70b-versatile',
       temperature: 0.1,
       response_format: { type: "json_object" }
     });

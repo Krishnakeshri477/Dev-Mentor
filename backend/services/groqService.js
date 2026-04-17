@@ -29,7 +29,7 @@ export const getGroqResponse = async (query, previousContext) => {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: query }
       ],
-      model: 'openai/gpt-oss-20b',
+      model: 'llama-3.3-70b-versatile',
       temperature: 0.5,
       response_format: { type: "json_object" }
     });
@@ -74,7 +74,7 @@ export const analyzeResumeText = async (text) => {
       messages: [
         { role: 'user', content: prompt }
       ],
-      model: 'openai/gpt-oss-20b',
+      model: 'llama-3.3-70b-versatile',
       temperature: 0.2, // low temperature for structured output
       response_format: { type: "json_object" }
     });

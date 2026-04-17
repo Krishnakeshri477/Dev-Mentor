@@ -1,29 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {
-  TrendingUp,
-  Target,
-  Search,
-  Zap,
-  Award,
-  AlertCircle,
-  ChevronRight,
-  RefreshCcw,
-  Sparkles,
-  MessageSquare,
-  History,
-  CheckCircle2,
-  XCircle,
-  PieChart as PieChartIcon
-} from 'lucide-react';
-import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  AreaChart,
-  Area
-} from 'recharts';
+import { TrendingUp, Target, Search, Zap, Award, AlertCircle, ChevronRight, RefreshCcw, Sparkles, MessageSquare, History, CheckCircle2, XCircle, PieChart as PieChartIcon } from 'lucide-react';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { AuthContext } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { getDashboardAnalysis } from '../api/dashboard';
@@ -38,8 +15,8 @@ const DashboardPage = () => {
   const fetchAnalysis = async () => {
     setLoading(true);
     try {
-      const data = await getDashboardAnalysis();
-      setData(data);
+      const response = await getDashboardAnalysis();
+      setData(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Connection to intelligence engine failed.');
     } finally {
@@ -58,6 +35,24 @@ const DashboardPage = () => {
           <div className="w-12 h-12 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin"></div>
           <p className="text-gray-500 font-medium animate-pulse text-lg tracking-wide">Syncing Career Intelligence...</p>
         </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 dark:bg-[#0A0A0A] p-10 text-center">
+        <div className="w-20 h-20 bg-rose-500/10 rounded-full flex items-center justify-center mb-6">
+          <AlertCircle className="w-10 h-10 text-rose-500" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Intelligence Engine Offline</h2>
+        <p className="text-gray-500 max-w-md mb-8">{error}</p>
+        <button 
+          onClick={fetchAnalysis} 
+          className="flex items-center gap-2 px-6 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-bold shadow-lg"
+        >
+          <RefreshCcw className="w-4 h-4" /> Retry Connection
+        </button>
       </div>
     );
   }

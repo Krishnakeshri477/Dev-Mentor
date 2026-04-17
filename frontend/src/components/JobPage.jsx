@@ -20,7 +20,8 @@ import { discoverRealJobs } from '../api/intelligence';
 const JobPage = () => {
   const { token, user } = useContext(AuthContext);
   const [experience, setExperience] = useState('1-3 years');
-  const [locationPreference, setLocationPreference] = useState('Remote');
+  const [locationPreference, setLocationPreference] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
   const [matchingResults, setMatchingResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [discovering, setDiscovering] = useState(false);
@@ -31,8 +32,8 @@ const JobPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await discoverRealJobs(experience, locationPreference);
-      setMatchingResults(data);
+      const response = await discoverRealJobs(experience, locationPreference, jobTitle);
+      setMatchingResults(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Connection to intelligence engine failed.');
     } finally {
@@ -44,8 +45,9 @@ const JobPage = () => {
     if (!token) return;
     setDiscovering(true);
     try {
-      const data = await discoverRealJobs(experience, locationPreference);
-      if (data.jobs) {
+      const response = await discoverRealJobs(experience, locationPreference, jobTitle);
+      const data = response.data;
+      if (data && data.jobs) {
         setMatchingResults(prev => ({
           ...prev,
           jobs: [...(prev?.jobs || []), ...data.jobs],
@@ -97,11 +99,21 @@ const JobPage = () => {
         {/* Dynamic Inputs */}
         <div className="flex flex-col sm:flex-row flex-wrap gap-4 items-center bg-white dark:bg-[#111] p-3 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl shadow-purple-500/5 w-full lg:w-auto">
           <div className="flex items-center gap-3 px-4 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-800 w-full sm:w-auto pb-3 sm:pb-0">
+            <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] whitespace-nowrap">Role</span>
+            <input 
+              type="text" 
+              value={jobTitle} 
+              onChange={(e) => setJobTitle(e.target.value)}
+              placeholder="Job Title"
+              className="bg-transparent font-black text-sm text-purple-500 focus:outline-none w-full sm:w-40 placeholder:text-purple-500/30"
+            />
+          </div>
+          <div className="flex items-center gap-3 px-4 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-800 w-full sm:w-auto pb-3 sm:pb-0">
             <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] whitespace-nowrap">Exp Level</span>
             <select 
               value={experience} 
               onChange={(e) => setExperience(e.target.value)}
-              className="bg-transparent font-black text-sm text-purple-500 focus:outline-none cursor-pointer hover:text-purple-400 transition-colors appearance-none flex-1"
+              className="bg-transparent font-black text-sm text-indigo-500 focus:outline-none cursor-pointer hover:text-indigo-400 transition-colors appearance-none flex-1"
             >
               <option value="Internship" className="bg-white dark:bg-[#111] text-gray-900 dark:text-gray-100">Internship</option>
               <option value="1-3 years" className="bg-white dark:bg-[#111] text-gray-900 dark:text-gray-100">1-3 Years</option>
@@ -116,7 +128,7 @@ const JobPage = () => {
               value={locationPreference} 
               onChange={(e) => setLocationPreference(e.target.value)}
               placeholder="Location..."
-              className="bg-transparent font-bold text-emerald-500 focus:outline-none w-full sm:w-24"
+              className="bg-transparent font-bold text-emerald-500 focus:outline-none w-full sm:w-24 placeholder:text-emerald-500/30"
             />
           </div>
           <button 
