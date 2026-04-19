@@ -16,8 +16,6 @@ export const getProfile = async () => {
 };
 
 export const redirectToGoogleAuth = () => {
-  const baseUrl = import.meta.env.VITE_API_URL.endsWith('/') 
-    ? import.meta.env.VITE_API_URL.slice(0, -1) 
-    : import.meta.env.VITE_API_URL;
-  window.location.href = `${baseUrl}/api/auth/google`;
+  const url = `${import.meta.env.VITE_API_URL}/api/auth/google`;
+  window.location.href = url;
 };

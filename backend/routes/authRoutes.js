@@ -20,7 +20,7 @@ router.get(
   passport.authenticate('google', { session: false, failureRedirect: '/login' }),
   (req, res) => {
     const token = generateToken(req.user._id);
-    res.redirect(`http://localhost:5173/auth/callback?token=${token}`);
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
   }
 );
 
