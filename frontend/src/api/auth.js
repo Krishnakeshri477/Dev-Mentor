@@ -14,3 +14,10 @@ export const getProfile = async () => {
   const response = await apiClient.get('/api/auth/profile');
   return response.data;
 };
+
+export const redirectToGoogleAuth = () => {
+  const baseUrl = import.meta.env.VITE_API_URL.endsWith('/') 
+    ? import.meta.env.VITE_API_URL.slice(0, -1) 
+    : import.meta.env.VITE_API_URL;
+  window.location.href = `${baseUrl}/api/auth/google`;
+};
