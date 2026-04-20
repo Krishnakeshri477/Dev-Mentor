@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const AuthCallback = () => {
-  const query = new URLSearchParams(window.location.search);
-  const token = query.get('token');
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
   const { setToken } = useContext(AuthContext);
   const navigate = useNavigate();
 
